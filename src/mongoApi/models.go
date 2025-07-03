@@ -9,6 +9,7 @@ import (
 type GridFSFile struct {
 	Id          interface{} `bson:"_id"`
 	Filename    string      `bson:"filename"`
+	Path        []string    `bson:"path"`
 	UploadDate  time.Time   `bson:"uploadDate"`
 	MD5         string      `bson:"md5"`
 	ChunkSize   int         `bson:"chunkSize"`

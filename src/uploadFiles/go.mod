@@ -8,6 +8,8 @@ replace github.com/okonma-violet/services => /home/andrey/go/pkg/mod/github.com/
 
 replace github.com/big-larry/suckutils => /home/andrey/go/pkg/mod/github.com/big-larry/suckutils@v0.0.0-20231029230114-645d5d858694
 
+replace github.com/big-larry/mgo => ../mgo@v1.0.0
+
 require filesharing/mongoApi v0.0.0-00010101000000-000000000000
 
 require (

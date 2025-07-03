@@ -4,19 +4,18 @@ import (
 	"context"
 
 	"github.com/big-larry/mgo"
-	"github.com/big-larry/suckhttp"
-	"github.com/okonma-violet/services/logs/logger"
 	"github.com/okonma-violet/services/universalservice_nonepoll"
 )
 
 type config struct {
+	DBName       string
+	GridFSPrefix string
 }
 
 type service struct {
 	session *mgo.Session
+	bucket  *mgo.GridFS
 }
-
-const thisServiceName universalservice_nonepoll.ServiceName = "filesharing_get_all_files"
 
 func (c *config) InitFlags() {}
 
@@ -25,31 +24,13 @@ func (c *config) PrepareHandling(ctx context.Context, pubs_getter universalservi
 
 	var err error
 
-	if err = s.initSession(); err != nil {
+	if err = s.initSession(c.DBName, c.GridFSPrefix); err != nil {
 		return nil, nil, err
 	}
 
 	return universalservice_nonepoll.CreateHTTPHandleFunc(s), s, nil
 }
 
-func (s *service) HandleHTTP(req *suckhttp.Request, l logger.Logger) (response *suckhttp.Response, err error) {
-	if req.GetMethod() == suckhttp.GET {
-		if body, err := s.getAllFiles(l); err != nil {
-			response = suckhttp.NewResponse(500, "Internal Server Error")
-		} else {
-			response = suckhttp.NewResponse(200, "OK").AddHeader("Content-Type", "application/json").SetBody(body)
-		}
-	} else {
-		response = suckhttp.NewResponse(405, "Method Not Allowed")
-	}
-	return
-}
-
-func (s *service) Close(l logger.Logger) error {
-	s.session.Close()
-	return nil
-}
-
 func main() {
-	universalservice_nonepoll.InitNewService(thisServiceName, &config{}, 1)
+	universalservice_nonepoll.InitNewServiceWithoutName(&config{}, 1)
 }
