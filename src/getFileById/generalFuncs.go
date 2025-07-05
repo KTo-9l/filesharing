@@ -17,6 +17,10 @@ func (s *service) initSession(dbName, prefix string) (err error) {
 	return
 }
 
+func (s *service) ensurePathIndex() error {
+	return mongoApi.EnsurePathIndex(s.bucket)
+}
+
 func fileToBytes(l logger.Logger, file *mgo.GridFile) ([]byte, error) {
 	bytes, err := io.ReadAll(file)
 	if err != nil {

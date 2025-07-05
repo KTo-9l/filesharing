@@ -28,6 +28,10 @@ func (c *config) PrepareHandling(ctx context.Context, pubs_getter universalservi
 		return nil, nil, err
 	}
 
+	if err = s.ensurePathIndex(); err != nil {
+		return nil, nil, err
+	}
+
 	return universalservice_nonepoll.CreateHTTPHandleFunc(s), s, nil
 }
 

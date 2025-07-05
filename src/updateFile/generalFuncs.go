@@ -12,3 +12,7 @@ func (s *service) initSession(dbName, prefix string) (err error) {
 	s.bucket = s.session.DB(dbName).GridFS(prefix)
 	return
 }
+
+func (s *service) ensurePathIndex() error {
+	return mongoApi.EnsurePathIndex(s.bucket)
+}
